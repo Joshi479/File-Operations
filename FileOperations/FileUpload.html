@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Read File</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
+    <script src="Scripts/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        function PopulateGrid() {
+            var myFile = document.getElementById("myFile").files[0];
+            if (!myFile) {
+                alert("File wrong!!!")
+            }
+            else {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var content = e.target.result;
+                    var ct = reader.result;
+                    var lines = ct.toString().split('\n');
+                    lines.forEach(function (line) {
+                        words = line.split('=');
+                        var labelWord;
+                        var textWord;
+                        var i = 0;
+                        words.forEach(function (word) {
+                            i++;
+                            if (i == 1)
+                                labelWord = word;
+                            else if (i == 2)
+                                textWord = word;
+                            else
+                                alert('More than two words');
+                        });
+                        $('#tblProfile').append('<tr><td>' + labelWord + '</td><td><input type="text" value="' + textWord + '" /></td></tr>');
+                    });
+                }
+                reader.readAsText(myFile);
+            }
+        }
+        $('#tblProfile').ready(function () {
+            $('tbody').sortable({
+                axis: 'y',
+                opacity: '0.5'
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <form>
+        <div id="fileUpload">
+            <label for="file">
+                Choose a file:
+            </label>
+            <input id="myFile" type="file" /><br />
+            <br />
+            <input type="button" value="Upload" onclick="PopulateGrid()" />
+        </div>
+        <div>
+            <table id="tblProfile">
+                <tbody>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</body>
+</html>
+
